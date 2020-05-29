@@ -3,7 +3,10 @@ This is a utility module to initialize, clean, and create the SQLite3 db.
 """
 
 import os, sys
+
+# adds __file__ parent dir (/yahtzee-app) to sys.path to enable config ref
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 from config import db
 from yahtzee.models import User
 
@@ -13,13 +16,13 @@ USERS = [
         'username': 'pmacking',
         'first_name': 'Paul',
         'last_name': 'Maclachlan',
-        'email': 'test@test.com'
+        'email': 'test@test.com',
     },
     {
         'username': 'tayadawne',
         'first_name': 'Taya',
         'last_name': 'Maclachlan',
-        'email': 'test@test.ca'
+        'email': 'test@test.ca',
     }
 ]
 
