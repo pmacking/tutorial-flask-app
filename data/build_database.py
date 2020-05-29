@@ -9,8 +9,18 @@ from yahtzee.models import User
 
 # dummy data to initialize the database with
 USERS = [
-    {'username': 'pmacking', 'first_name': 'Paul', 'last_name': 'Maclachlan'},
-    {'username': 'tayadawne', 'first_name': 'Taya', 'last_name': 'Maclachlan'}
+    {
+        'username': 'pmacking',
+        'first_name': 'Paul',
+        'last_name': 'Maclachlan',
+        'email': 'test@test.com'
+    },
+    {
+        'username': 'tayadawne',
+        'first_name': 'Taya',
+        'last_name': 'Maclachlan',
+        'email': 'test@test.ca'
+    }
 ]
 
 # delete database file if it already exists
@@ -25,7 +35,8 @@ for user in USERS:
     u = User(
         username=user['username'],
         first_name=user['first_name'],
-        last_name=user['last_name']
+        last_name=user['last_name'],
+        email=user['email']
         )
     db.session.add(u)
 
