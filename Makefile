@@ -20,3 +20,6 @@ lint:
 
 clean:
 	rm -rf .pytest_cache .coverage .pytest_cache coverage.xml
+
+db:
+	@python data/build_database.py
