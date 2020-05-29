@@ -8,8 +8,7 @@ consumes:
 produces:
   - "application/json"
 
-basepath:
-  - "/api"
+basePath: "/api"
 
 # Paths supported by server application
 paths:
