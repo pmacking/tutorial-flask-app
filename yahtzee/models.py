@@ -16,6 +16,7 @@ class User(db.Model):
     username = db.Column(db.String(32), nullable=False)
     first_name = db.Column(db.String(32), nullable=False)
     last_name = db.Column(db.String(32), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
     timestamp = db.Column(
         db.DateTime,
         default=datetime.utcnow,
