@@ -14,7 +14,7 @@ basePath: "/api"
 paths:
   /users:
     get:
-      operationId: "users.read"
+      operationId: "yahtzee.users.read"
       tags:
         - "Users"
       summary: "The users data structure supported by the application"
@@ -26,13 +26,13 @@ paths:
             type: "array"
             items:
               properties:
-                first_name:
-                  type: "string"
-                last_name:
-                  type: "string"
                 username:
                   type: "string"
                 email:
+                  type: "string"
+                first_name:
+                  type: "string"
+                last_name:
                   type: "string"
                 timestamp:
                   type: "string"
