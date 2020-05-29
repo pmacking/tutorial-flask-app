@@ -11,7 +11,7 @@ class User(db.Model):
     """
     User model which defines the user attributes and SQLite3 db table/fields.
     """
-    __table__ = "user"
+    __tablename__ = "user"
     user_id = db.Column(db.Integer, nullable=False, primary_key=True)
     username = db.Column(db.String(32), nullable=False)
     first_name = db.Column(db.String(32), nullable=False)
@@ -19,7 +19,7 @@ class User(db.Model):
     timestamp = db.Column(
         db.DateTime,
         default=datetime.utcnow,
-        onupdate=datetime.utc.now
+        onupdate=datetime.utcnow
         )
 
 
