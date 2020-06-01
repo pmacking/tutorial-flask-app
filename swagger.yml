@@ -17,8 +17,8 @@ paths:
       operationId: "yahtzee.users.read_all"
       tags:
         - "Users"
-      summary: "The users data structure supported by the application"
-      description: "Read the list of users"
+      summary: "Read the entire set of users, sorted by last name"
+      description: "Read the entire set of users, sorted by last name"
       responses:
         200:
           description: "Successful read users list operation"
@@ -28,11 +28,16 @@ paths:
               properties:
                 username:
                   type: "string"
-                email:
-                  type: "string"
+                  description: "username of the user"
                 first_name:
                   type: "string"
+                  description: "first name of the user"
                 last_name:
                   type: "string"
+                  description: "last name of the user"
+                email:
+                  type: "string"
+                  description: "email of the user"
                 timestamp:
                   type: "string"
+                  description: "time stamp of creating/updating user"
