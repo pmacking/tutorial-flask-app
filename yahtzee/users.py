@@ -53,7 +53,7 @@ def create(user):
     last_name = user.get('last_name')
     email = user.get('email')
 
-    existing_person = User.query \
+    existing_user = User.query \
         .filter(User.username == username) \
         .filter(User.first_name == first_name) \
         .filter(User.last_name == last_name) \
@@ -61,7 +61,7 @@ def create(user):
         .one_or_none()
 
     # can we insert this user?
-    if existing_person is None:
+    if existing_user is None:
 
         # create a user instance using the schema and passed-in user
         user_schema = UserSchema()
@@ -102,3 +102,53 @@ def read_one(user_id):
     # otherwise, no we didn't find user
     else:
         abort(404, f'User not found for Id: {user_id}')
+
+def update(user_id, user):
+    """
+    This function responds to a PUT api/v1/users/{user_id} to update a user in
+    the user structure. Throws an error if the user to update already exists.
+
+    :param user_id:     the ID of the user we want to update
+    :param user:        the user data to update with
+    :return:            updated user structure
+    """
+    # get the user requested from the data
+    update_user = User.query \
+        .filter(User.user_id == user_id) \
+        .one_or_none()
+
+    # try and find an existing user with the same data as user param
+    first_name = user.get("first_name")
+    last_name = user.get("last_name")
+
+    existing_user = User.query \
+        .filter(User.first_name == first_name) \
+        .filter(User.last_name == last_name) \
+        .one_or_none()
+
+    # are we updating a user that doesn't exist?
+    if update_user is None:
+        abort(404, f"User not found for Id: {user_id}")
+
+    # does the user to update with already exist (would we create dupe)?
+    elif (existing_user is not None and existing_user.user_id != user_id):
+        abort(409, f"Person {first_name} {last_name} already exists")
+
+    # otherwise update user
+    else:
+
+        # create a user instance using the schema and user param
+        user_schema = UserSchema()
+        update = user_schema.load(user, session=db.session)
+
+        # set the id to the user we want to update
+        update.user_id = update_user.user_id
+
+        # merge new object into old and commit to db
+        db.session.merge(update)
+        db.session.commit()
+
+        # return updated user in response
+        data = user_schema.dump(update_user)
+
+        return data, 200
