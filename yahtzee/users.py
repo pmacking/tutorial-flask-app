@@ -34,6 +34,46 @@ def read_all():
     # serialize data for response: many=True tells UserSchema expect iterable
     user_schema = UserSchema(many=True)
     # The return result is an object having a data attribute, an object
-    # containing a people list that can be converted to JSON. This is returned
+    # containing a user list that can be converted to JSON. This is returned
     # and converted by Connexion to JSON as the response to the REST API call
     return user_schema.dump(users).data
+
+
+def create(user):
+    """
+    This function responds to a post request to api/v1/users and creates a new
+    user in the users structure based on the passed-in user data
+
+    :param user:        user to create in the user structure
+    :return:            201 on success, 409 on user exists
+    """
+
+    username = user.get('username')
+    first_name = user.get('first_name')
+    last_name = user.get('last_name')
+    email = user.get('email')
+
+    existing_person = User.query \
+        .filter(User.username == username) \
+        .filter(User.first_name == first_name) \
+        .filter(User.last_name == last_name) \
+        .filter(User.email == email) \
+        .one_or_none()
+
+    # can we insert this user?
+    if existing_person is None:
+
+        # create a user instance using the schema and passed-in user
+        user_schema = UserSchema()
+        new_user = user_schema.load(user, session=db.session).data
+
+        # add user to database
+        db.session.add(new_user)
+        db.session.commit()
+
+        # serialize and return new user in the response
+        return user_schema.dump(new_user).data, 201
+
+    # otherwise, no user already exists
+    else:
+        abort(409, f'User {first_name} {last_name} already exists.')
