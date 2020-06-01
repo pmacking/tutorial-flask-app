@@ -73,22 +73,59 @@ paths:
           description: Successfully created user
           schema:
             properties:
-              properties:
-                user_id:
-                  type: "string"
-                  description: "Id of the user"
-                username:
-                  type: "string"
-                  description: "username of the user"
-                first_name:
-                  type: "string"
-                  description: "first name of the user"
-                last_name:
-                  type: "string"
-                  description: "last name of the user"
-                email:
-                  type: "string"
-                  description: "email of the user"
-                timestamp:
-                  type: "string"
-                  description: "time stamp of creating/updating user"
+              user_id:
+                type: "string"
+                description: "Id of the user"
+              username:
+                type: "string"
+                description: "username of the user"
+              first_name:
+                type: "string"
+                description: "first name of the user"
+              last_name:
+                type: "string"
+                description: "last name of the user"
+              email:
+                type: "string"
+                description: "email of the user"
+              timestamp:
+                type: "string"
+                description: "time stamp of creating/updating user"
+
+  /users/{user_id}:
+    get:
+      operationId: "yahtzee.users.read_one"
+      tags:
+        - "Users"
+      summary: "Read one user"
+      description: "Read one user"
+      paramaters:
+        - name: user_id
+          in: path
+          description: Id of user to get
+          type: integer
+          required: True
+      responses:
+        200:
+          description: "Successfully read user from user data operation"
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: "string"
+                description: "Id of the user"
+              username:
+                type: "string"
+                description: "username of the user"
+              first_name:
+                type: "string"
+                description: "first name of the user"
+              last_name:
+                type: "string"
+                description: "last name of the user"
+              email:
+                type: "string"
+                description: "email of the user"
+              timestamp:
+                type: "string"
+                description: "time stamp of creating/updating user"
