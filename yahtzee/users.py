@@ -77,3 +77,28 @@ def create(user):
     # otherwise, no user already exists
     else:
         abort(409, f'User {first_name} {last_name} already exists.')
+
+
+def read_one(user_id):
+    """
+    This function responds to a request for api/v1/users/{user_id} with one
+    matching user from users
+
+    :param user_id:     ID of user to find
+    :return:            user matching ID
+    """
+    # get one_or_none user requested from our data
+    user = User.query \
+        .filter(User.user_id == user_id) \
+        .one_or_none()
+
+    # did we find person
+    if user is not None:
+
+        # serialize data for response
+        user_schema = UserSchema(many=False)
+        return user_schema.dump(user).data
+
+    # otherwise, no we didn't find user
+    else:
+        abort(404, f'User not found for Id: {user_id}')
