@@ -8,13 +8,13 @@ consumes:
 produces:
   - "application/json"
 
-basePath: "/api"
+basePath: "/api/v1"
 
 # Paths supported by server application
 paths:
   /users:
     get:
-      operationId: "yahtzee.users.read"
+      operationId: "yahtzee.users.read_all"
       tags:
         - "Users"
       summary: "The users data structure supported by the application"
