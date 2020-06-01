@@ -129,3 +129,58 @@ paths:
               timestamp:
                 type: "string"
                 description: "time stamp of creating/updating user"
+
+    put:
+      operationId: "yahtzee.users.update"
+      tags:
+        - "Users"
+      summary: "Update one user"
+      description: "Update one user"
+      parameters:
+        - name: user_id
+          in: path
+          description: Id of user to update
+          type: integer
+          required: True
+        - name: user
+          in: body
+          description: "User to update"
+          required: True
+          schema:
+              type: object
+              properties:
+                username:
+                  type: "string"
+                  description: "username of the user"
+                first_name:
+                  type: "string"
+                  description: "first name of the user"
+                last_name:
+                  type: "string"
+                  description: "last name of the user"
+                email:
+                  type: "string"
+                  description: "email of the user"
+      responses:
+        200:
+          description: Successfully updated user
+          schema:
+            properties:
+                user_id:
+                  type: "string"
+                  description: "Id of the user"
+                username:
+                  type: "string"
+                  description: "username of the user"
+                first_name:
+                  type: "string"
+                  description: "first name of the user"
+                last_name:
+                  type: "string"
+                  description: "last name of the user"
+                email:
+                  type: "string"
+                  description: "email of the user"
+                timestamp:
+                  type: "string"
+                  description: "time stamp of creating/updating user"
