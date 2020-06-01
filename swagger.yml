@@ -48,7 +48,7 @@ paths:
         - "Users"
       summary: "Create a user"
       description: "Create a new user"
-      paramaters:
+      parameters:
         - name: user
           in: body
           description: "User to create"
@@ -99,7 +99,7 @@ paths:
         - "Users"
       summary: "Read one user"
       description: "Read one user"
-      paramaters:
+      parameters:
         - name: user_id
           in: path
           description: Id of user to get
