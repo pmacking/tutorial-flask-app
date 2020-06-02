@@ -152,3 +152,29 @@ def update(user_id, user):
         data = user_schema.dump(update_user)
 
         return data, 200
+
+
+def delete(user_id):
+    """
+    This function deletes the user from the user structure
+
+    :param user_id: The user_id of the user
+    :return: 200 if successful, 404 if user not found
+    """
+    delete_user = User.query \
+        .filter(User.user_id == user_id) \
+        .one_or_none()
+
+    # is the user in the database?
+    if delete_user is not None:
+        db.session.delete(delete_user)
+        db.session.commit()
+        return make_response(
+            f"User {user_id} deleted.", 200
+        )
+
+    # didn't find the user?
+    else:
+        abort(
+            404, f"User {user_id} not found."
+        )

@@ -184,3 +184,19 @@ paths:
                 timestamp:
                   type: "string"
                   description: "time stamp of creating/updating user"
+
+    delete:
+      operationId: "yahtzee.users.delete"
+      tags:
+        - "Users"
+      summary: "Delete one user"
+      description: "Delete one user"
+      parameters:
+        - name: user_id
+          in: path
+          description: Id of user to delete
+          type: integer
+          required: True
+      responses:
+        200:
+          description: Successfully deleted user
