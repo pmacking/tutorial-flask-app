@@ -8,7 +8,7 @@ import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from config import db
-from yahtzee.models import Game, User
+from yahtzee.models import Game, User, UsersGames
 
 # dummy data to initialize the database with
 USERS = [
@@ -29,6 +29,57 @@ USERS = [
 GAMES = [
     {
     }
+]
+
+USERSGAMES = [
+    {
+        'ones': 0,
+        'twos': 0,
+        'threes': 0,
+        'fours': 0,
+        'fives': 0,
+        'sixes': 0,
+        'three_of_a_kind': 0,
+        'four_of_a_kind': 0,
+        'full_house': 0,
+        'small_straight': 0,
+        'large_straight': 0,
+        'yahtzee': 0,
+        'chance': 0,
+        'yahtzee_bonus': 0,
+        'top_score': 0,
+        'top_bonus_score': 0,
+        'top_bonus_score_delta': 0,
+        'total_top_score': 0,
+        'total_bottom_score': 0,
+        'grand_total_score': 0,
+        'user_id': 1,
+        'game_id': 1
+    },
+    {
+        'ones': 0,
+        'twos': 0,
+        'threes': 0,
+        'fours': 0,
+        'fives': 0,
+        'sixes': 0,
+        'three_of_a_kind': 0,
+        'four_of_a_kind': 0,
+        'full_house': 0,
+        'small_straight': 0,
+        'large_straight': 0,
+        'yahtzee': 0,
+        'chance': 0,
+        'yahtzee_bonus': 0,
+        'top_score': 0,
+        'top_bonus_score': 0,
+        'top_bonus_score_delta': 0,
+        'total_top_score': 0,
+        'total_bottom_score': 0,
+        'grand_total_score': 0,
+        'user_id': 2,
+        'game_id': 1
+    },
 ]
 
 # delete database file if it already exists
@@ -52,5 +103,33 @@ for user in USERS:
 for game in GAMES:
     g = Game()
     db.session.add(g)
+
+# iterate over the USERSGAMES dummy data and populate the users_games in the db
+for user_game in USERSGAMES:
+    ug = UsersGames(
+        ones=user_game['ones'],
+        twos=user_game['twos'],
+        threes=user_game['threes'],
+        fours=user_game['fours'],
+        fives=user_game['fives'],
+        sixes=user_game['sixes'],
+        three_of_a_kind=user_game['three_of_a_kind'],
+        four_of_a_kind=user_game['four_of_a_kind'],
+        full_house=user_game['full_house'],
+        small_straight=user_game['small_straight'],
+        large_straight=user_game['large_straight'],
+        yahtzee=user_game['yahtzee'],
+        chance=user_game['chance'],
+        yahtzee_bonus=user_game['yahtzee_bonus'],
+        top_score=user_game['top_score'],
+        top_bonus_score=user_game['top_bonus_score'],
+        top_bonus_score_delta=user_game['top_bonus_score_delta'],
+        total_top_score=user_game['total_top_score'],
+        total_bottom_score=user_game['total_bottom_score'],
+        grand_total_score=user_game['grand_total_score'],
+        user_id=user_game['user_id'],
+        game_id=user_game['game_id']
+        )
+    db.session.add(ug)
 
 db.session.commit()
