@@ -38,3 +38,25 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         sqla_session = db.session
+
+
+class Game(db.Model):
+    """
+    Game model which defines the game attributes and db table/fields.
+    """
+    __tablename__ = "game"
+    game_id = db.Column(db.Integer, nullable=False, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"Game('{self.game_id}', '{self.timestamp}'"
+
+
+class GameSchema(ma.SQLAlchemyAutoSchema):
+    """
+    This game schema inherets from SQLAlchemyAutoSchema and uses the Meta
+    class to find the SQLAlchemy model Game and the db.session.
+    """
+    class Meta:
+        model = Game
+        sqla_session = db.session

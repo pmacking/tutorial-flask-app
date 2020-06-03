@@ -8,7 +8,7 @@ import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from config import db
-from yahtzee.models import User
+from yahtzee.models import Game, User
 
 # dummy data to initialize the database with
 USERS = [
@@ -23,6 +23,11 @@ USERS = [
         'first_name': 'Taya',
         'last_name': 'Maclachlan',
         'email': 'test@test.ca',
+    }
+]
+
+GAMES = [
+    {
     }
 ]
 
@@ -42,5 +47,10 @@ for user in USERS:
         email=user['email']
         )
     db.session.add(u)
+
+# iterate over GAMES dummy data and populate the games in the db
+for game in GAMES:
+    g = Game()
+    db.session.add(g)
 
 db.session.commit()
