@@ -23,6 +23,12 @@ class User(db.Model):
         onupdate=datetime.utcnow
         )
 
+    def __repr__(self):
+        return (
+            f"User('{self.user_id}', '{self.username}', '{self.first_name}', "
+            f"'{self.last_name}', '{self.email}')"
+        )
+
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     """
