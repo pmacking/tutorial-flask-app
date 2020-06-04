@@ -88,10 +88,10 @@ class User(db.Model):
     """
     __tablename__ = "user"
     user_id = db.Column(db.Integer, nullable=False, primary_key=True)
-    username = db.Column(db.String(32), nullable=False)
+    username = db.Column(db.String(32), unique=True, nullable=False)
     first_name = db.Column(db.String(32), nullable=False)
     last_name = db.Column(db.String(32), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), unique=True, nullable=False)
     timestamp = db.Column(
         db.DateTime,
         default=datetime.utcnow,
