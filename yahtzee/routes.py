@@ -24,3 +24,14 @@ def home():
         .all()
 
     return render_template("home.html", users=users)
+
+
+@connexion_app.route("/about")
+def about():
+    """
+    This function responds to the browser URL localhost:5000/about
+
+    return:         the renedered template "about.html"
+    """
+
+    return render_template("about.html")
