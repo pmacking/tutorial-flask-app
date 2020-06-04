@@ -14,12 +14,14 @@ from yahtzee.models import Game, User, UsersGames
 USERS = [
     {
         'username': 'pmacking',
+        'password': 'abc123',
         'first_name': 'Paul',
         'last_name': 'Maclachlan',
         'email': 'test@test.com',
     },
     {
         'username': 'tayadawne',
+        'password': 'abc123',
         'first_name': 'Taya',
         'last_name': 'Maclachlan',
         'email': 'test@test.ca',
@@ -83,8 +85,8 @@ USERSGAMES = [
 ]
 
 # delete database file if it already exists
-if os.path.exists('yahtzee.db'):
-    os.remove('yahtzee.db')
+if os.path.exists('./data/yahtzee.db'):
+    os.remove('./data/yahtzee.db')
 
 # create the database
 db.create_all()
@@ -93,6 +95,7 @@ db.create_all()
 for user in USERS:
     u = User(
         username=user['username'],
+        password=user['password'],
         first_name=user['first_name'],
         last_name=user['last_name'],
         email=user['email']
