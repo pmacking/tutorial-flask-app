@@ -1,10 +1,13 @@
 attrs==19.3.0
+bcrypt==3.1.7
 certifi==2020.4.5.1
+cffi==1.14.0
 chardet==3.0.4
 click==7.1.2
 clickclick==1.2.2
 connexion==2.7.0
 Flask==1.1.2
+Flask-Bcrypt==0.7.1
 flask-marshmallow==0.12.0
 Flask-SQLAlchemy==2.4.3
 idna==2.9
@@ -16,6 +19,7 @@ MarkupSafe==1.1.1
 marshmallow==3.6.0
 marshmallow-sqlalchemy==0.23.0
 openapi-spec-validator==0.2.8
+pycparser==2.20
 pyrsistent==0.16.0
 PyYAML==5.3.1
 requests==2.23.0
