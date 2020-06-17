@@ -9,6 +9,7 @@ import connexion
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
+from yahtzee.forms import RegistrationForm, LoginForm
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,6 +24,8 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     'sqlite:///' + os.path.join(BASEDIR, 'data/yahtzee.db')
 app.config['SQLALCHMEY_TRACK_MODIFICATIONS'] = False
+# TODO: update config layout to manage app.config key-values in env var
+app.config['SECRET_KEY'] = 'e7511ba97f3f9253329a64d47c392669'
 
 # create SQLAlchemy db instance
 db = SQLAlchemy(app)
