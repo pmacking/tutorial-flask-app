@@ -9,7 +9,7 @@ from flask import (
     abort,
 )
 
-from config import db
+from yahtzee import db
 
 # import SQLAlchemy User and Marshmallow UserSchema classes to access user
 # database table and serialize the results

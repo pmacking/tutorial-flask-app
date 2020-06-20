@@ -4,7 +4,7 @@ This module contains the models for yahtzee. It also makes use of SQLAlchemy
 """
 
 from datetime import datetime
-from config import db, ma
+from yahtzee import db, ma
 
 
 class UsersGames(db.Model):

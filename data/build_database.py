@@ -7,7 +7,7 @@ import os, sys
 # adds __file__ parent dir (/yahtzee-app) to sys.path to enable config ref
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-from config import db
+from yahtzee import db
 from yahtzee.models import Game, User, UsersGames
 
 # dummy data to initialize the database with
