@@ -130,3 +130,6 @@ dmypy.json
 
 # SQLite3 DB
 *.db
+
+# yahtzee config.py
+config.py
