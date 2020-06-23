@@ -7,7 +7,9 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 # Length class validates acceptable length of data
 # Email class validates data as email format
 # EqualTo class validates attribute == other attribute as 'arg'
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+
+from yahtzee.models import User
 
 
 class RegistrationForm(FlaskForm):
@@ -29,6 +31,24 @@ class RegistrationForm(FlaskForm):
                                      validators=[DataRequired(),
                                                  EqualTo('password')])
     submit = SubmitField('Sign Up')
+
+    def validate_username(self, username):
+        """Validates username before add/commit user in /register route
+
+        :param username: username of registration from.
+        """
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError(f'Please select a unique username.')
+
+    def validate_email(self, email):
+        """Validates username before add/commit user in /register route
+
+        :param username: username of registration from.
+        """
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError(f'Please select a unique email.')
 
 
 class LoginForm(FlaskForm):

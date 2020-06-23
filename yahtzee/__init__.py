@@ -3,7 +3,6 @@ import connexion
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
-from yahtzee.forms import RegistrationForm, LoginForm
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
