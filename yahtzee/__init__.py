@@ -3,6 +3,7 @@ import connexion
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -13,13 +14,23 @@ connexion_app = connexion.App(__name__, specification_dir=BASEDIR)
 app = connexion_app.app
 
 # config app instance from config.py class
-app.config.from_object("config.DevelopmentConfig")
+if app.config["ENV"] == "production":
+    app.config.from_object("config.ProductionConfig")
+elif app.config["ENV"] == "testing":
+    app.config.from_object("config.TestingConfig")
+else:
+    app.config.from_object("config.DevelopmentConfig")
 
 # create SQLAlchemy db instance from app with configs above
 db = SQLAlchemy(app)
 
 # init Bcrypt
 bcrypt = Bcrypt(app)
+
+# init LoginManager
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
 
 # init Marshmallow
 ma = Marshmallow(app)

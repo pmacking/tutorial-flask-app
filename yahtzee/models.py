@@ -4,7 +4,13 @@ This module contains the models for yahtzee. It also makes use of SQLAlchemy
 """
 
 from datetime import datetime
-from yahtzee import db, ma
+from yahtzee import db, ma, login_manager
+from flask_login import UserMixin
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 class UsersGames(db.Model):
@@ -36,7 +42,7 @@ class UsersGames(db.Model):
     total_bottom_score = db.Column(db.Integer, nullable=False)
     grand_total_score = db.Column(db.Integer, nullable=False)
     user_id = db.Column(
-        db.Integer, db.ForeignKey('user.user_id'), nullable=False
+        db.Integer, db.ForeignKey('user.id'), nullable=False
     )
     game_id = db.Column(
         db.Integer, db.ForeignKey('game.game_id'), nullable=False
@@ -82,17 +88,22 @@ class UsersGamesSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     """
     User model which defines the user attributes and SQLite3 db table/fields.
     """
     __tablename__ = "user"
-    user_id = db.Column(db.Integer, nullable=False, primary_key=True)
+    id = db.Column(db.Integer, nullable=False, primary_key=True)
     username = db.Column(db.String(32), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     first_name = db.Column(db.String(32), nullable=False)
     last_name = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
+    image_file = db.Column(
+                        db.String(20),
+                        nullable=False,
+                        default='default.jpg'
+                        )
     timestamp = db.Column(
         db.DateTime,
         default=datetime.utcnow,
@@ -102,7 +113,7 @@ class User(db.Model):
 
     def __repr__(self):
         return (
-            f"User('{self.user_id}', '{self.username}', '{self.first_name}', "
+            f"User('{self.id}', '{self.username}', '{self.first_name}', "
             f"'{self.last_name}', '{self.email}')"
         )
 
