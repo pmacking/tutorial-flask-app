@@ -8,17 +8,17 @@ consumes:
 produces:
   - "application/json"
 
-basePath: "/api"
+basePath: "/api/v1"
 
 # Paths supported by server application
 paths:
   /users:
     get:
-      operationId: "yahtzee.users.read"
+      operationId: "yahtzee.users.read_all"
       tags:
         - "Users"
-      summary: "The users data structure supported by the application"
-      description: "Read the list of users"
+      summary: "Read the entire set of users, sorted by last name"
+      description: "Read the entire set of users, sorted by last name"
       responses:
         200:
           description: "Successful read users list operation"
@@ -28,11 +28,175 @@ paths:
               properties:
                 username:
                   type: "string"
-                email:
-                  type: "string"
+                  description: "username of the user"
                 first_name:
                   type: "string"
+                  description: "first name of the user"
                 last_name:
                   type: "string"
+                  description: "last name of the user"
+                email:
+                  type: "string"
+                  description: "email of the user"
                 timestamp:
                   type: "string"
+                  description: "time stamp of creating/updating user"
+
+    post:
+      operationId: "yahtzee.users.create"
+      tags:
+        - "Users"
+      summary: "Create a user"
+      description: "Create a new user"
+      parameters:
+        - name: user
+          in: body
+          description: "User to create"
+          required: True
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                description: username of user to create
+              first_name:
+                type: string
+                description: first name of user to create
+              last_name:
+                type: string
+                description: last name of user to create
+              email:
+                type: string
+                description: email of user to create
+      responses:
+        201:
+          description: Successfully created user
+          schema:
+            properties:
+              user_id:
+                type: "string"
+                description: "Id of the user"
+              username:
+                type: "string"
+                description: "username of the user"
+              first_name:
+                type: "string"
+                description: "first name of the user"
+              last_name:
+                type: "string"
+                description: "last name of the user"
+              email:
+                type: "string"
+                description: "email of the user"
+              timestamp:
+                type: "string"
+                description: "time stamp of creating/updating user"
+
+  /users/{user_id}:
+    get:
+      operationId: "yahtzee.users.read_one"
+      tags:
+        - "Users"
+      summary: "Read one user"
+      description: "Read one user"
+      parameters:
+        - name: user_id
+          in: path
+          description: Id of user to get
+          type: integer
+          required: True
+      responses:
+        200:
+          description: "Successfully read user from user data operation"
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: "string"
+                description: "Id of the user"
+              username:
+                type: "string"
+                description: "username of the user"
+              first_name:
+                type: "string"
+                description: "first name of the user"
+              last_name:
+                type: "string"
+                description: "last name of the user"
+              email:
+                type: "string"
+                description: "email of the user"
+              timestamp:
+                type: "string"
+                description: "time stamp of creating/updating user"
+
+    put:
+      operationId: "yahtzee.users.update"
+      tags:
+        - "Users"
+      summary: "Update one user"
+      description: "Update one user"
+      parameters:
+        - name: user_id
+          in: path
+          description: Id of user to update
+          type: integer
+          required: True
+        - name: user
+          in: body
+          description: "User to update"
+          required: True
+          schema:
+              type: object
+              properties:
+                username:
+                  type: "string"
+                  description: "username of the user"
+                first_name:
+                  type: "string"
+                  description: "first name of the user"
+                last_name:
+                  type: "string"
+                  description: "last name of the user"
+                email:
+                  type: "string"
+                  description: "email of the user"
+      responses:
+        200:
+          description: Successfully updated user
+          schema:
+            properties:
+                user_id:
+                  type: "string"
+                  description: "Id of the user"
+                username:
+                  type: "string"
+                  description: "username of the user"
+                first_name:
+                  type: "string"
+                  description: "first name of the user"
+                last_name:
+                  type: "string"
+                  description: "last name of the user"
+                email:
+                  type: "string"
+                  description: "email of the user"
+                timestamp:
+                  type: "string"
+                  description: "time stamp of creating/updating user"
+
+    delete:
+      operationId: "yahtzee.users.delete"
+      tags:
+        - "Users"
+      summary: "Delete one user"
+      description: "Delete one user"
+      parameters:
+        - name: user_id
+          in: path
+          description: Id of user to delete
+          type: integer
+          required: True
+      responses:
+        200:
+          description: Successfully deleted user
