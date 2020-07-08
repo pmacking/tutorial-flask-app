@@ -7,9 +7,11 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import login_user, current_user, logout_user, login_required
 
-from yahtzee import app, connexion_app, db, bcrypt
+from yahtzee import app, connexion_app, db, bcrypt, mail
 from yahtzee.models import User
-from yahtzee.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from yahtzee.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
+                           RequestResetForm, ResetPasswordForm)
+from flask_mail import Message
 
 import logging
 logger = logging.getLogger(__name__)
@@ -184,7 +186,8 @@ def account():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
-            logger.info(f"Updated {current_user.username} picture: {picture_file}")
+            logger.info(f"Updated {current_user.username} "
+                        f"picture: {picture_file}")
 
         # update current_user with form field data, and commit to db
         current_user.username = form.username.data
@@ -216,3 +219,97 @@ def account():
 
     return render_template("account.html", title='Account',
                            image_file=image_file, form=form)
+
+
+def send_reset_email(user):
+    """
+    Gets a token from passed-in user and mail.send a reset password email.
+
+    :param user: unauthenticated user
+    """
+    # get token for passed-in user from User model's get_reset_token() method
+    token = user.get_reset_token()
+
+    # create a Message instance
+    msg = Message(
+            'Password Reset Request',
+            sender='noreply@demo.com',
+            recipients=[user.email]
+            )
+
+    # add msg body with url_for link containing route, token and _external
+    # boolean True to make link absolute url (relative works when inside app)
+    msg.body = f"""To reset your password, visit the following link:
+{url_for('reset_token', token=token, _external=True)}
+
+If you did not maket this request then ignore this email.
+"""
+
+    # send the email msg
+    mail.send(msg)
+
+
+@connexion_app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():  # this func is named _request vs _password in url
+    """
+    This route issues a password reset token for unauthorized user email
+    """
+    # ensure user is not authenticated in order to reset password (vs update)
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    form = RequestResetForm()
+
+    # if rendered form is submitted, get user from email, send reset email
+    # with token, and redirect user to the login page
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('Email has been sent to reset your password', 'info')
+        return redirect(url_for('login'))
+
+    return render_template("reset_request.html", title='Reset Password',
+                           form=form)
+
+
+@connexion_app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):  # this func is named _token, accepts token param
+    """
+    This route allows user to reset password with a valid token
+    """
+    # ensure user is not authenticated in order to reset password (vs update)
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    # get the user_id using the verify_reset_token method and token param
+    user = User.verify_reset_token(token)
+
+    # check if user was not returned due to invalid token
+    if user is None:
+        flash("That is an invalid or expired token", "warning")
+        return redirect(url_for('reset_request'))
+
+    # if user was valid present the reset password (reset_token) form
+    form = ResetPasswordForm()
+
+    # handle password/confirm password reset form submission
+    if form.validate_on_submit():
+
+        # hash password from reset password form submission
+        hashed_password = bcrypt.generate_password_hash(
+                            form.password.data).decode('utf-8')
+
+        # try to update user password in db
+        try:
+            user.password = hashed_password
+            db.session.commit()
+            flash(f'Your password has been updated.', 'success')
+            logger.info(f'User created: "{user}"')
+        except Exception as e:
+            logger.exception(f'{e}')
+
+        # redirect user to login page
+        return redirect(url_for('login'))  # url_for arg is route func not arg
+
+    return render_template("reset_token.html", title='Reset Password',
+                           form=form)

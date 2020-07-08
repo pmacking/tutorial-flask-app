@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_mail import Mail
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,6 +21,9 @@ elif app.config["ENV"] == "testing":
     app.config.from_object("config.TestingConfig")
 else:
     app.config.from_object("config.DevelopmentConfig")
+
+# create mail server, pulling app.config from config.py and env variables
+mail = Mail(app)
 
 # create SQLAlchemy db instance from app with configs above
 db = SQLAlchemy(app)
