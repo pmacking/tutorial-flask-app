@@ -9,8 +9,8 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 # Length class validates acceptable length of data
 # Email class validates data as email format
 # EqualTo class validates attribute == other attribute as 'arg'
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-
+from wtforms.validators import (DataRequired, Length, Email,
+                                EqualTo, ValidationError)
 from yahtzee.models import User
 
 
