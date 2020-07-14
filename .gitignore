@@ -132,5 +132,4 @@ dmypy.json
 *.db
 
 # yahtzee config.py
-config.py
 profile_pics/
