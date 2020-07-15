@@ -9,8 +9,8 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 # Length class validates acceptable length of data
 # Email class validates data as email format
 # EqualTo class validates attribute == other attribute as 'arg'
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-
+from wtforms.validators import (DataRequired, Length, Email,
+                                EqualTo, ValidationError)
 from yahtzee.models import User
 
 
@@ -49,7 +49,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError(f'Please select a unique username.')
 
     def validate_email(self, email):
-        """Validates username before add/commit user in route
+        """Validates email before add/commit user in route
 
         :param email: email of form.
         """
@@ -110,7 +110,7 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError(f'Please select a unique username.')
 
     def validate_email(self, email):
-        """Validates username before add/commit user in route
+        """Validates email before add/commit user in route
 
         :param email: email of form.
         """
@@ -121,3 +121,36 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError(f'Please select a unique email.')
+
+
+class RequestResetForm(FlaskForm):
+    """
+    This is a form to request a password reset token
+
+    :param FlaskForm: class inheretence from FlaskForm in flask_wtf
+    """
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        """Validates email doesn't exist so we can inform user to create an account.
+
+        :param email: email of form.
+        """
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError(f'Email does not exist, please register.')
+
+
+class ResetPasswordForm(FlaskForm):
+    """
+    This is a form to reset password
+
+    :param FlaskForm: class inheretence from FlaskForm in flask_wtf
+    """
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(),
+                                                 EqualTo('password')])
+    submit = SubmitField('Reset Password')

@@ -4,7 +4,8 @@ This module contains the models for yahtzee. It also makes use of SQLAlchemy
 """
 
 from datetime import datetime
-from yahtzee import db, ma, login_manager
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from yahtzee import db, ma, login_manager, app
 from flask_login import UserMixin
 
 
@@ -116,6 +117,31 @@ class User(db.Model, UserMixin):
             f"User('{self.id}', '{self.username}', '{self.first_name}', "
             f"'{self.last_name}', '{self.email}')"
         )
+
+    def get_reset_token(self, expires_sec=1800):
+        """
+        Create a reset token for a user with an expiry.
+
+        :param expires_sec: expiration time for token (default 1800 secs)
+        :return: token
+        """
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        """
+        Verify reset token and try to return user.
+
+        :param token: a token
+        :return: user
+        """
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
 
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
